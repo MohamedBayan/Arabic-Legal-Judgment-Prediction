@@ -43,12 +43,19 @@ model_name = "mbayan/Llama-3.2-3b-ArLJP"
 tokenizer = AutoTokenizer.from_pretrained(model_name)
 model = AutoModelForCausalLM.from_pretrained(model_name)
 
-instruction = ""
-facts = ""
-input_text = f"{instruction}\n\n{facts}"
+instruction = "استنادًا إلى الوقائع، قم بتحليل الأسباب واستخرج نص الحكم النهائي"
+legal_case = """
+الوقائع:
+تقدم خالد الأحمدي بدعوى ضد ماجد الزهراني للمطالبة باسترداد مبلغ (٥٠,٠٠٠) ريال، الذي دفعه له للاستثمار في تجارة إلكترونية، إلا أن المشروع لم يُنفذ ولم يُرد المبلغ.
+
+الأسباب:
+بما أن النزاع يتعلق باسترداد مبلغ مالي، فهو من اختصاص المحكمة التجارية. لكن نظرًا لوفاة المدعي قبل الجلسة الأولى، فإن الدعوى تنقطع ويجب تقديمها من الورثة وفقًا للنظام.
+
+"""
+input_text = f"{instruction}\n\n{legal_case}"
 inputs = tokenizer(input_text, return_tensors="pt")
 
-outputs = model.generate(**inputs, max_length=...)
+outputs = model.generate(**inputs, max_length=512)
 print(tokenizer.decode(outputs[0], skip_special_tokens=True))
 ```
 
